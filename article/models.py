@@ -18,7 +18,6 @@ class Article(TimeStampModel):
     category = models.ForeignKey("article.Category", verbose_name="Category", on_delete=models.PROTECT, related_name='articles')
     title = models.CharField("Title", max_length=250)
     content = models.TextField("Content")
-    image = models.ImageField("Picture", upload_to='Articles')
     
     
     
@@ -45,7 +44,7 @@ class DailyCategorySummary(TimeStampModel):
         
     
 class Report(TimeStampModel):
-    summary_id = models.OneToOneField("article.DailyCategorySummary", verbose_name="Summary", on_delete=models.CASCADE, related_name='report')
+    summary = models.OneToOneField("article.DailyCategorySummary", verbose_name="Summary", on_delete=models.CASCADE, related_name='report')
     status = models.BooleanField("Status")
     
     
@@ -69,3 +68,9 @@ class ReportLine(TimeStampModel):
     
     class Meta:
         db_table = 'ReportLines'
+        
+        
+        
+class Notification(TimeStampModel):
+    user = models.OneToOneField('user.User', on_delete=models.CASCADE, related_name='notifs') 
+    category = models.ManyToManyField("article.Category", verbose_name="Category", on_delete=models.PROTECT)
